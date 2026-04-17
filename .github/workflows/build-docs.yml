@@ -26,6 +26,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Send start webhook
+      if: always()
+      run: |
+         curl -X POST ${{ secrets.WEBHOOK_URL }} \
+           -H "Content-Type: application/json" \
+           -d "{\"status\":\"Starting to run a docs build for arcade.\"}"
+    
     - name: Checkout docs repo
       uses: actions/checkout@v4
 
