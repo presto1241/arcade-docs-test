@@ -26,17 +26,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+    - name: Checkout docs repo
+      uses: actions/checkout@v4
+
+    - name: Checkout source repo
+      uses: actions/checkout@v4
+      with:
+        repository: iamberlan/Arcade
+        path: source
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Install DocFX
+      run: dotnet tool install -g docfx
+    - name: Build docs
+      run: |
+        cd source
+        docfx Documentation/docfx.json
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: source/_site
 
   # Deployment job
   deploy:
