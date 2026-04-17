@@ -20,7 +20,7 @@ jobs:
       - name: Send start webhook
         if: always()
         run: |
-          curl -X POST ${{ secrets.WEBHOOK_URL }} \
+          curl -v -f -X POST ${{ secrets.WEBHOOK_URL }} \
             -H "Content-Type: application/json" \
             -d "{\"content\":\"Starting to run a docs build for arcade.\"}"
 
@@ -55,7 +55,7 @@ jobs:
       - name: Send webhook
         if: always()
         run: |
-          curl -X POST ${{ secrets.WEBHOOK_URL }} \
+          curl -v -f -X POST ${{ secrets.WEBHOOK_URL }} \
             -H "Content-Type: application/json" \
             -d "{\"content\":\"${{ job.status }}\"}"
 
